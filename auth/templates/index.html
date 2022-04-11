@@ -1,0 +1,25 @@
+{% extends 'auth_layout.html' %}
+{% block title %}Example Home Page{% endblock %}
+{% block style %}  class="bg-light" {% endblock %}
+
+{% block content %}
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+    {{ msg }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+
+<div id="layoutAuthentication">
+    <div id="layoutAuthentication_content">
+        <main>
+            <div class="container">
+                <h1>Hi {{session.name}}!!</br> <br> Welcome to the index page...</h1><br>
+            
+               <a href="{{ url_for('auth.logout') }}" class="btn btn-primary">Logout</a>
+            </div>
+        </main>
+    </div>
+    <div id="layoutAuthentication_footer">
+        {% include 'footer.html' %}
+    </div>
+</div>
+{% endblock %}
