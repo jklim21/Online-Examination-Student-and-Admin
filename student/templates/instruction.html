@@ -1,0 +1,102 @@
+{% extends 'layout.html' %}
+
+{% block title %}Instructions{% endblock %}
+
+{% block content %}
+<div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+            <div class="sb-sidenav-menu">
+                <div class="nav">
+                    <div class="sb-sidenav-menu-heading">Step 3 of 5</div>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%"></div>
+                    </div>
+                    <a class="nav-link" href="faq.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                        FAQ
+                    </a>
+                </div>
+            </div>
+            <div class="sb-sidenav-footer">
+                <div class="small">Logged in as:</div>
+                {{session.name}}
+            </div>
+        </nav>
+    </div>
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                {% with messages = get_flashed_messages() %}
+                    {% for message in messages %}
+                        {% with errors = get_flashed_messages(category_filter=["face_error"]) %}     
+                            {% if errors %}
+                                <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% else %}
+                                <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endif %}
+                        {% endwith %}
+                    {% endfor %}
+                {% endwith %}  
+                <div class="row">
+                    <div class="col-xl-2"></div>
+                    <div class="col-xl-8">
+                        <h1 class="mt-1 text-center">EXAM INSTRUCTIONS</h1>
+                    </div>
+                    <div class="col-xl-2 mt-3">
+                        <form method="post" action="{{ url_for('student.exam') }}">
+                            <input type="image" src="{{ url_for('student.static', filename='assets/other_img/circle_right.png') }}" class="float-end" width="45" height="45">
+                        </form>
+                    </div>
+                </div>
+                <div class="row mt-1">
+                    <div class="col-xl-1" >
+                    </div>
+                    <div class="col-xl-10" style="border: 3px solid black;">
+                        <div class="text-start lh-base">
+                            <ol>
+                                <li class="lh-lg">Please keep your webcam <strong>on</strong> and microphone <strong>off</strong> throughout the entire session.</li>
+                                <li class="lh-lg">One invigilator will be assigned for every ten students.</li>
+                                <li class="lh-lg">You are not allowed to take any breaks throughout the examination session.</li>
+                                <li class="lh-lg">Sit at least one foot away from Computer so that webcam can cover the writing posture.</li>
+                                <li class="lh-lg">Keep your mobile phone in silent mode and place it on the table so that it is visible in the webcam.</li>
+                                <li class="lh-lg">After the end of examination session, you will be directed to the upload page. Please capture the answer sheets in sequential order and save them in the <strong>format Name_SequenceNumber.PNG/JPEG (example : Tan_Ah_Hock_1.PNG)</strong> before uploading.</li>
+                                <li class="lh-lg">Only three disruptions due to network/power issues amounting to total of <strong>thirty minutes is allowed.</strong></li>
+                                <li class="lh-lg"><strong>In case of any disruption immediately stop writing and send WhatsApp message to Helpline number.</strong></li>
+                                <li class="lh-lg">You will be warned only three times for moving away from the view of camera and/or involving in suspicious activities like hand, neck and eyes movement. You will be booked for cheating attempts for subsequent times.</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="col-xl-1">
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer class="py-4 bg-light mt-auto">
+            <div class="container-fluid px-4">
+                <div class="d-flex align-items-center justify-content-between small">
+                    <div class="text-muted">Copyright &copy; Your Website 2022</div>
+                    <div>
+                        <a href="#">Privacy Policy</a>
+                        &middot;
+                        <a href="#">Terms &amp; Conditions</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+<script>
+    window.setTimeout(function() {  // https://codepen.io/ath3nA/pen/NVOpeG
+        $(".alert").fadeTo(500, 0).slideUp(500, function(){
+            $(this).remove(); 
+        });
+    }, 2000);
+</script>
+{% endblock %}

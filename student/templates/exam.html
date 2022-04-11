@@ -1,0 +1,73 @@
+{% extends 'layout.html' %}
+
+{% block title %}Exam{% endblock %}
+
+{% block content %}
+<div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+            <div class="sb-sidenav-menu">
+                <div class="nav">
+                    <div class="sb-sidenav-menu-heading">Step 4 of 5</div>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%"></div>
+                    </div>
+                    <a class="nav-link" href="faq.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                        FAQ
+                    </a>
+                </div>
+            </div>
+            <div class="sb-sidenav-footer">
+                <div class="small">Logged in as:</div>
+                {{session.name}}
+            </div>
+        </nav>
+    </div>
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <div class="row">
+                    <div class="col-xl-2 mt-4">
+                        <img src="{{ url_for('student.detection') }}" width="50%"/>
+                    </div>
+                    <div class="col-xl-8">
+                        <h1 class="mt-2 text-center">EXAM</h1>
+                        <div class="text-center">
+                            <input type="image" src="{{ url_for('student.static', filename='assets/other_img/alarm.png') }}" width="20" height="20" style="display:inline-block; margin-right:10px;">
+                            <h3 id="time" style="display:inline-block;"></h3>
+                        </div>
+                        <div class="row">
+                            <iframe src="/student/static/exam.pdf#toolbar=0&view=FitH" width="100%" height="370px" style="border: none solid black;"></iframe>
+
+                        </div>
+                    </div>
+                    <div class="col-xl-2 mt-3">
+                        <form method="post" action="{{ url_for('student.upload_page') }}">
+                            <input type="image" src="{{ url_for('student.static', filename='assets/other_img/circle_right.png') }}" class="float-end" width="45" height="45">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="py-4 bg-light mt-auto">
+            <div class="container-fluid px-4">
+                <div class="d-flex align-items-center justify-content-between small">
+                    <div class="text-muted">Copyright &copy; Your Website 2022</div>
+                    <div>
+                        <a href="#">Privacy Policy</a>
+                        &middot;
+                        <a href="#">Terms &amp; Conditions</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+<audio id="over_music">
+    <source src="{{ url_for('student.static', filename='assets/beep.mp3') }}">
+</audio>
+<script>  var Seconds = '{{ num }}';  </script>
+<script> var session_id = '{{ session_id }}'; // THIS WAS USED TO TEST FORCE DIRECT TO PENDING PAGE FROM THE EXAM PAGE</script>
+{% endblock %}

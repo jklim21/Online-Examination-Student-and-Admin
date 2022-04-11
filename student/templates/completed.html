@@ -1,0 +1,92 @@
+{% extends 'layout.html' %}
+
+{% block title %}Completed{% endblock %}
+
+{% block content %}
+<div id="layoutSidenav">
+    <div id="layoutSidenav_nav">
+        <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+            <div class="sb-sidenav-menu">
+                <div class="nav">
+                    <div class="sb-sidenav-menu-heading">All Examinations</div>
+                    <a class="nav-link" href="{{ url_for('student.pending', session_id = session_id) }}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        PENDING 
+                    </a>
+                    <a class="nav-link" href="{{ url_for('student.completed') }}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                        COMPLETED 
+                    </a>
+                    <a class="nav-link" href="{{ url_for('student.expired') }}">
+                        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                        EXPIRED 
+                    </a>
+                    <a class="nav-link" href="faq.html">
+                        <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                        FAQ
+                    </a>
+                </div>
+            </div>
+            <div class="sb-sidenav-footer">
+                <div class="small">Logged in as:</div>
+                {{session.name}}
+            </div>
+        </nav>
+    </div>
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4 text-center">COMPLETED EXAMINATIONS</h1>
+                <ol class="breadcrumb mb-4">
+                    <li class="breadcrumb-item"><h5>Click on "View Details" for examination details.</h5></li>
+                </ol>
+                <div class="row">
+                    {% for row in data %}
+                    <div class="col-xl-3">
+                        <div class="card bg-success text-white mb-4 relative">
+                            <div class="card-body text-center">{{row.0}} ({{row.1}})</div>
+                            <div class="card-footer align-items-center justify-content-between">
+                                <a class="small text-white stretched-link collapsible" href="#">View Details</a>
+                                <div class="content">
+                                    <table border="0" style="width: 100%; margin-top: 20px;">
+                                        <tr>
+                                            <td class="left-block">Date:</td>
+                                            <td class="right-block">{{row.2}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="left-block">Start Time:</td>
+                                            <td class="right-block">{{row.3}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="left-block">End Time:</td>
+                                            <td class="right-block">{{row.4}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="left-block">Duration:</td>
+                                            <td class="right-block">{{row.5}} hours</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </main>
+        <footer class="py-4 bg-light mt-auto">
+            <div class="container-fluid px-4">
+                <div class="d-flex align-items-center justify-content-between small">
+                    <div class="text-muted">Copyright &copy; Your Website 2022</div>
+                    <div>
+                        <a href="#">Privacy Policy</a>
+                        &middot;
+                        <a href="#">Terms &amp; Conditions</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+
+{% endblock %}
