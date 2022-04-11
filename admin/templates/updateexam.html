@@ -1,0 +1,452 @@
+{% extends 'layout.html' %}
+
+
+  
+{% block content %}      
+        <!-- START OF SIDE NAVIGATION -->
+        <div id="layoutSidenav">
+          <div id="layoutSidenav_nav">
+            <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                <div class="sb-sidenav-menu">
+                    <div class="nav">
+                        <div class="sb-sidenav-menu-heading">All Examinations</div>
+                        <a class="nav-link" href="{{ url_for('admin.IndexHome') }}">
+                            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                            Home Page 
+                        </a>
+                        <a class="nav-link" href="{{ url_for('admin.Index') }}">
+                            <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                            Examination Records 
+                        </a>
+                    </div>
+                </div>
+                <div class="sb-sidenav-footer">
+                    <div class="small">Logged in as:</div>
+                    Administrator
+                </div>
+            </nav>
+        </div>
+            
+            
+            <!-- Start of Homepage Content -->
+            <div id="layoutSidenav_content">
+
+                <!-- Actual Content -->
+                <h2 class="updateHeader"> Examination Records </h2>
+                <main>
+                    
+                    <h6> &nbsp;  &nbsp; <button type="button" class="btn btn-success pull-right" data-toggle ="modal" data-target = "#mymodal"> Add an Exam </button> </h6> 
+
+                    {% with messages = get_flashed_messages() %}
+
+                    {% if messages %}
+
+                    {% for message in messages %}
+
+                    <div class="alert alert-success alert-dismissable" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                            <span aria-hidden="true"> X </span>
+                        </button>
+                        {{message}}
+                    </div>
+
+                    {% endfor %}
+
+                    {% endif %}
+
+                    {% endwith %}
+                    
+                    <div class="container">
+                        <div class="row">
+                          <div class="col-12">
+                            <table class="table table-bordered">
+                              <!-- TABLE HEADERS -->
+                              <thead>
+                                <tr>
+                                  <th scope="col">Course Code</th>
+                                  <th scope="col">Course Name</th>
+                                  <th scope="col">Date</th>
+                                  <th scope="col">Start Time</th>
+                                  <th scope="col">End Time</th>
+                                  <th scope="col"> Exam Paper </th>
+                                  <th scope="col"> Name of Exam Paper </th>
+                                  <th scope="col"> Student List </th>
+                                  <th scope="col"> Invigilator List </th>
+                                  <th scope="col">Action</th>
+                                </tr>
+                              </thead>
+
+                              <tbody>
+                                <!-- FIRST TABLE CONTENT -->  
+                                {% for row in examinations %}
+                                <tr>
+                                  <th scope="row">{{row.1}}</th>
+                                  <td>{{row.2}}</td>
+                                  <td>{{row.3}}</td>
+                                  <td>{{row.4}}</td>
+                                  <td>{{row.5}}</td>
+
+                                   <!-- Upload Exam Paper once --> 
+                                  <td> <a href='/admin/uploadpaper/{{row.1}}' data-toggle="modal" data-target="#modaluploadpaper{{row.1}}"><button type="button" class="btn btn-success"><i class="fas fa-upload"></i></button></a></td>
+
+                                  <!-- Upload Exam Paper twice --> 
+                                  <td> {{row.8}} <a href='/admin/upload/{{row.1}}' data-toggle="modal" data-target="#modalupload{{row.1}}"><button type="button" class="btn btn-success"><i class="fas fa-upload"></i></button></a> 
+                                    <a href="/admin/view/{{row.0}}"><button type="button" class="btn btn-primary"><i class="fas fa-eye"></i></button></a>
+                                    <a href='/admin/deletepaper/{{row.0}}'><button type="button" class="btn btn-danger"><i class="far fa-trash-alt"></i></button></a>
+                                  </td>
+                                  
+                                  <!-- Student Namelist cell - has a upload button and a view button --> 
+                                  <td> <input id="studentNamelistName" value="{{row.9}}" readonly>  </input>  <a href='/admin/upload1/{{row.1}}' data-toggle="modal" data-target="#modalupload1{{row.1}}"><button type="button" class="btn btn-success"><i class="fas fa-upload"></i></button></a> 
+                                    <a href="/admin/viewnamelist1/{{row.9}}"><button type="button" class="btn btn-primary"><i class="fas fa-eye"></i></button></a>
+                                    <a href='/admin/deletenamelist1/{{row.0}}'><button type="button" class="btn btn-danger"><i class="far fa-trash-alt"></i></button></a>
+                                  </td> 
+
+                                  <!-- Invigilator Namelist cell - has a upload button and a view button --> 
+                                  <td> <input value="{{row.10}} " readonly>  </input>  <a href='/admin/upload2/{{row.1}}' data-toggle="modal" data-target="#modalupload2{{row.1}}"><button type="button" class="btn btn-success"><i class="fas fa-upload"></i></button></a> 
+                                    <a href="/admin/viewnamelist2/{{row.10}}"><button type="button" class="btn btn-primary"><i class="fas fa-eye"></i></button></a>
+                                    <a href='/admin/deletenamelist2/{{row.0}}'><button type="button" class="btn btn-danger"><i class="far fa-trash-alt"></i></button></a>
+                                  </td> 
+
+                                  <td>
+                                    <a href='/admin/update/{{row.1}}' data-toggle="modal" data-target="#modaledit{{row.1}}"><button type="button" class="btn btn-success"><i class="fas fa-edit"></i></button></a>
+                                    <a href='/admin/delete/{{row.0}}' onclick="confirm('Are you sure you want to delete this examination record?')"><button type="button" class="btn btn-danger"><i class="far fa-trash-alt"></i></button></a>
+                                  </td>
+                                </tr>
+
+                                <!--  Div container containing information to EDIT AND UPDATE an exam -->
+                    <div id="modaledit{{row.1}}" class="modal fade" role="dialog" enctype="multipart/form-data">
+                        <div class="modal-dialog">
+                           <div class="modal-content">
+                               <div class="modal-header">
+                                   <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                   <h4 class="modal-title"> Please Edit Examination Record &nbsp; &nbsp; &nbsp; &nbsp;</h4>
+                                </div>
+                               <div class="modal-body">
+
+                               <form action="{{url_for('admin.update')}}" method="POST" name="EditAnExam" onsubmit="return validateEditAnExam()">
+
+                                 <div class="form-group">                                     
+                                    <input hidden type="text" class="form-control "name="examID" id="examID" value="{{row.0}}"> <br>
+                                 </div>
+                               
+                                  <div class="form-group">
+                                       <label> Course Code: </label>
+                                       <input type="text" class="form-control "name="coursecode" id="coursecode" value="{{row.1}}"> <br>
+                                  </div>
+
+                                  <div class="form-group">
+                                    <label> Course Name: </label>
+                                    <input type="text" class="form-control "name="courseName" id="courseName" value="{{row.2}}"> <br>
+                                  </div>
+                               
+
+                               
+                                 <div class="form-group">
+                                      <label> Date: </label>
+                                      <input min="01-01-2000" max="12-31-2025" type="date" class="form-control" value="{{row.3}}" name="date"> <br>
+                                 </div>
+                               
+
+                               
+                                 <div class="form-group">
+                                    <label>Start Time:</label>
+                                    <input type="time" id="startTime" name="startTime" value="{{row.4}}"> <br>
+                                 </div>
+
+
+                                 <div class="form-group">
+                                    <label>End Time:</label>
+                                    <input type="time" id="endTime" name="endTime" value="{{row.5}}"> <br>
+                                 </div>
+
+                                 
+
+                                  <div class="form-group">
+                                     <button class="btn btn-primary" type="submit"> Update Record</button>
+                                   </div> 
+                              
+
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                  </div>
+                              </form>
+                           </div> 
+                        </div>  
+                    </div> 
+                  </div>
+
+                     <!--  Div container containing information to UPLOAD an exam Paper -->
+                     <div id="modalupload{{row.1}}" class="modal fade" role="dialog" enctype="multipart/form-data">
+                      <div class="modal-dialog">
+                         <div class="modal-content">
+                             <div class="modal-header">
+                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                 <h4 class="modal-title"> Please Upload Exam Paper &nbsp; &nbsp; &nbsp; &nbsp;</h4>
+                              </div>
+                             <div class="modal-body">
+
+                             <form action="{{url_for('admin.upload')}}" method="POST" enctype="multipart/form-data">
+
+                               <div class="form-group">                                     
+                                  <input hidden type="text" class="form-control "name="examID" id="examID" value="{{row.0}}"> <br>
+                               </div>
+                             
+                                
+                                
+                                <div class="form-group">
+                                    <label> Upload Exam Paper: </label>
+                                    <input accept="application/pdf" type="file" id="examPaper" name="examPaper[]" value="{{row.7}}" multiple>
+                               </div>
+                             
+
+                              
+
+                                <div class="form-group">
+                                   <button class="btn btn-primary" type="submit"> Upload Exam </button>
+                                 </div> 
+                            
+
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </form>
+                         </div> 
+                      </div>  
+                  </div> 
+                </div>
+
+                <!--  Div container containing information to UPLOAD an exam Paper -->
+                <div id="modaluploadpaper{{row.1}}" class="modal fade" role="dialog" enctype="multipart/form-data">
+                  <div class="modal-dialog">
+                     <div class="modal-content">
+                         <div class="modal-header">
+                             <button type="button" class="close" data-dismiss="modal">&times;</button>
+                             <h4 class="modal-title"> Please Upload Exam Paper &nbsp; &nbsp; &nbsp; &nbsp;</h4>
+                          </div>
+                         <div class="modal-body">
+
+                         <form action="{{url_for('admin.uploadpaper')}}" method="POST" enctype="multipart/form-data">
+
+                           <div class="form-group">                                     
+                              <input hidden type="text" class="form-control "name="examID" id="examID" value="{{row.0}}"> <br>
+                           </div>
+                         
+                            
+                            
+                            <div class="form-group">
+                                <label> Upload Exam Paper: </label>
+                                <input accept="application/pdf" type="file" id="examPaper" name="examPaper[]" value="{{row.7}}" multiple>
+                           </div>
+                         
+
+                          
+
+                            <div class="form-group">
+                               <button class="btn btn-primary" type="submit"> Upload Exam Paper </button>
+                             </div> 
+                        
+
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </form>
+                     </div> 
+                  </div>  
+              </div> 
+            </div>
+
+                    <!--  Div container containing information to UPLOAD student namelist -->
+                    <div id="modalupload1{{row.1}}" class="modal fade" role="dialog" enctype="multipart/form-data">
+                      <div class="modal-dialog">
+                         <div class="modal-content">
+                             <div class="modal-header">
+                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                 <h4 class="modal-title"> Please Upload Student Namelist &nbsp; &nbsp; &nbsp; &nbsp;</h4>
+                              </div>
+                             <div class="modal-body">
+
+                             <form action="{{url_for('admin.upload1')}}" method="POST" enctype="multipart/form-data" name="UploadNamelist">
+
+                               <div class="form-group">                                     
+                                  <input hidden type="text" class="form-control "name="examID" id="examID" value="{{row.0}}"> <br>
+                               </div>
+                             
+                                
+                          
+                                
+                               <div class="form-group">
+                                <label> Upload Student Namelist: </label>
+                                <input accept=".csv" type="file" id="studentNamelist" name="studentNamelist[]" value="{{row.8}}" multiple>
+                               </div>
+                             
+
+                              
+
+                                <div class="form-group">
+                                   <button class="btn btn-primary" type="submit"> Upload Namelist </button>
+                                 </div> 
+                            
+
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </form>
+                         </div> 
+                      </div>  
+                  </div> 
+                </div>
+
+                <!--  Div container containing information to UPLOAD invigilator namelist -->
+                <div id="modalupload2{{row.1}}" class="modal fade" role="dialog" enctype="multipart/form-data">
+                  <div class="modal-dialog">
+                     <div class="modal-content">
+                         <div class="modal-header">
+                             <button type="button" class="close" data-dismiss="modal">&times;</button>
+                             <h4 class="modal-title"> Please Upload Invigilator Namelist &nbsp; &nbsp; &nbsp; &nbsp;</h4>
+                          </div>
+                         <div class="modal-body">
+
+                         <form action="{{url_for('admin.upload2')}}" method="POST" enctype="multipart/form-data">
+
+                           <div class="form-group">                                     
+                              <input hidden type="text" class="form-control "name="examID" id="examID" value="{{row.0}}"> <br>
+                           </div>
+                         
+                            
+                      
+                            
+                           <div class="form-group">
+                            <label> Upload Invigilator Namelist: </label>
+                            <input accept=".csv" type="file" id="invigilatorNamelist" name="invigilatorNamelist[]" value="{{row.9}}" multiple>
+                           </div>
+                         
+
+                          
+
+                            <div class="form-group">
+                               <button class="btn btn-primary" type="submit"> Upload Namelist </button>
+                             </div> 
+                        
+
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </form>
+                     </div> 
+                  </div>  
+              </div> 
+            </div>
+
+                
+            </div>
+
+                  {% endfor%} 
+
+                                      <!--  Pop-up to ADD an exam -->
+                                      <div id="mymodal" class="modal fade" role="dialog">
+                                        <div class="modal-dialog">
+                                           <div class="modal-content">
+                                               <div class="modal-header">
+                                                   <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                   <h4 class="modal-title"> Please Add Examination Record &nbsp; &nbsp; &nbsp; &nbsp; </h4>
+                                                </div>
+                                               <div class="modal-body">
+                
+                                               <form action="{{url_for('admin.insert')}}" method="POST" name="AddAnExam" onsubmit="return validateAddAnExam()"> 
+                                               
+                                                  <div class="form-group">
+                                                       <label> Course Code: </label>
+                                                       <input type="text" class="form-control" name="coursecode" required="1">
+                                                  </div>
+
+                                                  <div class="form-group">
+                                                    <label> Course Name: </label>
+                                                    <input type="text" class="form-control" name="coursename" required="1">
+                                                 </div>
+                                               
+                
+                                               
+                                                 <div class="form-group">
+                                                      <label> Date: </label>
+                                                      <input type="date"  placeholder="dd-mm-yyyy" class="form-control" name="date" required="1">
+                                                 </div>
+                                               
+                
+                                               
+                                                 <div class="form-group">
+                                                      <label> Start Time: </label>
+                                                      <input type="time" id="startTime" class="form-control" name="startTime" required="1">
+                                                 </div>
+                
+                                                 <div class="form-group">
+                                                    <label> End Time: </label>
+                                                    <input type="time" id="endTime" class="form-control" name="endTime" required="1">
+                                                 </div>
+                                                   
+
+                                                 <div class="form-group">
+                                                  <label> Duration (in hours): </label>
+                                                  <input type="number" step="0.5" id="Duration" class="form-control" name="Duration" required="1">
+                                                 </div>
+                                                
+                
+                                                  <div class="form-group">
+                                                     <button class="btn btn-primary" type="submit"> Insert Record </button>
+                                                   </div> 
+                                              
+                
+                                                  <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                  </div>
+                                              </form>
+                                           </div> 
+                                        </div>  
+                                    </div> 
+                                  </div>
+
+                                
+                                
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+
+                    
+                 
+            
+                </main>
+
+                <!--  Footer -->
+                <footer class="py-4 bg-light mt-auto">
+                    <div class="container-fluid px-4">
+                        <div class="d-flex align-items-center justify-content-between small">
+                            <div class="text-muted">Copyright &copy; Final Year Project - Monisha Dasarathan </div>
+                            <div>
+                                <a href="#">Privacy Policy</a>
+                                &middot;
+                                <a href="#">Terms &amp; Conditions</a>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+
+            </div>
+        </div>
+
+
+
+        <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="js/scripts.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+        <script src="assets/demo/chart-area-demo.js"></script>
+        <script src="assets/demo/chart-bar-demo.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
+        <script src="js/datatables-simple-demo.js"></script> -->
+        <script src="{{url_for('admin.static', filename='js/jquery-3.6.0.js')}}"></script>
+        <script src="{{url_for('admin.static', filename='js/scripts.js')}}"></script>
+        <script src="{{url_for('admin.static', filename='datatables-simple-demo.js')}}"></script>
+        <script src="{{url_for('admin.static', filename='js/bootstrap.min.js')}}"></script>
+        <script type="text/javascript" src="{{url_for('admin.static', filename='/js/formvalidation.js')}}"></script>
+
+        {% endblock %}

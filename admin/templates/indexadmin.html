@@ -1,0 +1,67 @@
+{% extends 'layout.html' %}
+
+
+{% block content %}
+       <style>
+        h1 {text-align: center;}
+        p {text-align: center;}
+        </style>
+        <!-- START OF SIDE NAVIGATION -->
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_nav">
+                <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                    <div class="sb-sidenav-menu">
+                        <div class="nav">
+                            <div class="sb-sidenav-menu-heading">All Examinations</div>
+                            <a class="nav-link" href="{{ url_for('admin.IndexHome') }}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                Home Page 
+                            </a>
+                            <a class="nav-link" href="{{ url_for('admin.Index') }}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
+                                Examination Records
+                            </a>
+                        </div>
+                    </div>
+                    <div class="sb-sidenav-footer">
+                        <div class="small">Logged in as:</div>
+                        Administrator
+                    </div>
+                </nav>
+            </div>
+            
+            
+            <!-- Start of Homepage Content -->
+            <div id="layoutSidenav_content">
+
+                <!-- Actual Content -->
+                <main>
+                     <br>
+                      <h1> Welcome {{username}} </h1>
+                  
+                <hr>
+                  <p>
+                        This application will allow you to create, edit and delete an examination records.
+                        Please go to the "Examination Records" tab to take a look at the records created thus far.
+                  </p>
+
+
+                </main>
+
+                <!--  Footer -->
+                <footer class="py-4 bg-light mt-auto">
+                    <div class="container-fluid px-4">
+                        <div class="d-flex align-items-center justify-content-between small">
+                            <div class="text-muted">Copyright &copy; Final Year Project - Monisha Dasarathan </div>
+                            <div>
+                                <a href="#">Privacy Policy</a>
+                                &middot;
+                                <a href="#">Terms &amp; Conditions</a>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+
+            </div>
+        </div>        
+{% endblock %}
